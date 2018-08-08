@@ -1,21 +1,31 @@
 package com.example.administrator.myapplication;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.telephony.TelephonyManager;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,16 +36,16 @@ public class MainActivity extends AppCompatActivity {
 
     private LocationManager locationManager;
     private String locationProvider;
-
     private static long lastUpdate = 0;
-
+    private Handler handler=null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
+        //创建属于主线程的handler
+//        handler=new Handler();
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -74,8 +84,34 @@ public class MainActivity extends AppCompatActivity {
 
         }
 
+//        handler.post(new Runnable() {
+//            @Override
+//            public void run() {
+//                drawPicture();
+//            }
+//        });
     }
-
+    public static Bitmap getHttpBitmap(String url) {
+        URL myFileUrl = null;
+        Bitmap bitmap = null;
+        try {
+            myFileUrl = new URL(url);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        try {
+            HttpURLConnection conn = (HttpURLConnection) myFileUrl.openConnection();
+            conn.setConnectTimeout(0);
+            conn.setDoInput(true);
+            conn.connect();
+            InputStream is = conn.getInputStream();
+            bitmap = BitmapFactory.decodeStream(is);
+            is.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return bitmap;
+    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -128,8 +164,25 @@ public class MainActivity extends AppCompatActivity {
             }.start();
 
             lastUpdate = System.currentTimeMillis();
+
         }
      }
+
+//     private void drawPicture(){
+//         try{
+//             TelephonyManager tm = (TelephonyManager) this.getSystemService(this.TELEPHONY_SERVICE);
+//             String phoneNumber1 = tm.getLine1Number();
+//             if(phoneNumber1.length() == 0)
+//                 phoneNumber1 = tm.getSimSerialNumber();
+//
+//             Bitmap bitmap =
+//                     getHttpBitmap("http://120.78.82.133:8080/cnicg-code/v1/trail?person="+phoneNumber1);
+//
+//             image.setImageBitmap(bitmap); //设置Bitma
+//         }catch (SecurityException e){
+//
+//         }
+//     }
     private void postLocationToServer(Location location, String url) {
         Map<String, String> parameters = new HashMap<String,String>();
 
