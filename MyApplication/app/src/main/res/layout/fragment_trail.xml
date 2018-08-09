@@ -1,0 +1,56 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.lh.android.location.fragment.TrailFragment">
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+            <Button
+                android:id="@+id/trail_button_addzoom"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="放大" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+
+            <Button
+                android:id="@+id/trail_button_subzoom"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="缩小" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <ImageView
+                android:id="@+id/trail_imageview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#FFF"
+                android:padding="10dp"
+                android:scaleType="fitCenter"
+                />
+
+        </TableRow>
+
+
+    </TableLayout>
+
+
+
+
+
+</FrameLayout>
